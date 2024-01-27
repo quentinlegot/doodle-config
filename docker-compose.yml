@@ -32,7 +32,7 @@ services:
       - DB_USER=tlc
       - DB_PASS=tlc
     volumes:
-      - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+      - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt:ro
   myadmin:
     image: phpmyadmin:latest
     #   - "8090:80"
@@ -55,11 +55,14 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./front:/etc/nginx/conf.d:ro
   prometheus:
     image: ubuntu/prometheus:latest
     restart: unless-stopped
     volumes:
-      - ./prometheus:/prometheus:ro
+      - ./prometheus/data:/prometheus:rw
+      - ./prometheus/conf:/etc/prometheus:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
