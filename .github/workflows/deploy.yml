@@ -1,0 +1,35 @@
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: Deploy to server
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+      # - name: Install ansible
+      #   run: apt update -y && apt install -y ansible # do need to install, already done on runner
+      - name: Add password to a file
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_PASS: ${{ secrets.VM_PASSWORD }}
+          VM_IP: ${{ secrets.VM_IP }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_ROOT_PASS: ${{ secrets.DB_ROOT_PASS }}
+        run: |
+          cd ansible
+          mkdir host_vars
+          touch "${VM_IP}.yml"
+          echo "vault_ansible_ssh_user: ${VM_USER}" >> "host_vars/${VM_IP}.yml"
+          echo "vault_ansible_ssh_pass: ${VM_PASS}" >> "host_vars/${VM_IP}.yml"
+          echo "vault_pass: ${DB_PASS}" >> "host_vars/${VM_IP}.yml"
+          echo "vault_root_pass: ${DB_ROOT_PASS}" >> "host_vars/${VM_IP}.yml"
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with: 
+          playbook: deploy.yml
+          directory: ./ansible
+          options: |
+            -i hosts

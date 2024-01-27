@@ -1,0 +1,38 @@
+
+- name: Install git
+  apt:
+    name: [ git ]
+    update_cache: true
+    state: latest
+- name: Clone project
+  git:
+    repo: 'https://github.com/quentinlegot/doodlestudent'
+    dest: "/home/{{ user }}/doodle"
+    depth: 1
+    force: yes
+- name: Create secret file 1
+  copy:
+    dest: "/home/{{ user }}/doodle/db_pass.txt"
+    content: "{{ db_pass }}"
+- name: Create secret file 2
+  copy:
+    dest: "/home/{{ user }}/doodle/db_root_pass.txt"
+    content: "{{ db_root_pass }}"
+# - name: Install docker pip module
+#   pip:
+#     name: [ "docker" ]
+#     state: latest
+# - name: (Re)Build and run/restart containers # doesn't support compose v2
+#   docker_compose:
+#     project_src: "/home/{{ user }}/doodle"
+#     build: yes
+- name: Pull docker images
+  command:
+    chdir: "/home/{{ user }}/doodle"
+    cmd: "docker compose pull"
+- name: run/restart containers
+  command:
+    chdir: "/home/{{ user }}/doodle"
+    cmd: "docker compose up -d --build --remove-orphans"
+# - name: Remove unused docker images
+#   command: docker rmi -f $(docker images --filter dangling=true -q)

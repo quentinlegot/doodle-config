@@ -1,0 +1,6 @@
+user: vagrant
+ansible_ssh_user: "{{ vault_ansible_ssh_user }}"
+ansible_ssh_pass: "{{ vault_ansible_ssh_pass }}"
+ansible_become_pass: "{{ vault_ansible_ssh_pass }}"
+db_root_pass: "{{ vault_root_pass }}"
+db_pass: "{{ vault_pass }}"

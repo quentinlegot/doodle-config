@@ -1,0 +1,6 @@
+- name: Deploy website
+  hosts: master
+  remote_user: "{{ user }}"
+  become: true
+  roles:
+    - master

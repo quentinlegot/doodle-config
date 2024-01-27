@@ -1,0 +1,97 @@
+version: "3.8"
+services:
+  api:
+    image: quentinlegot/tlc-api:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: quentinlegot/tlc-db:latest
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_pass
+      MYSQL_DATABASE: tlc
+      MYSQL_USER: tlc
+      MYSQL_PASSWORD_FILE: /run/secrets/db_pass
+    secrets:
+      - db_pass
+      - db_root_pass
+  etherpad:
+    image: etherpad/etherpad
+    restart: unless-stopped
+    # ports:
+    #   - "9001:9001"
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=tlc
+      - DB_USER=tlc
+      - DB_PASS=tlc
+    volumes:
+      - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+  myadmin:
+    image: phpmyadmin:latest./prometheus_data
+    #   - "8090:80"
+    environment:
+      PMA_HOST: db
+    secrets:
+      - db_pass
+  mail:
+    image: bytemark/smtp
+    restart: unless-stopped
+    ports:
+      - "2525:25"
+  front:
+    image: quentinlegot/tlc-front:latest
+    restart: unless-stopped
+    depends_on:
+      - "api"
+      - "etherpad"
+      - "myadmin"
+    ports:
+      - "80:80"
+      - "443:443"
+  prometheus:
+    image: ubuntu/prometheus:latest
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/prometheus:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    environment:
+      - GF_SERVER_PROTOCOL=http
+      - GF_SERVER_DOMAIN=quentinl.diverse-team.fr
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/metrics
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    volumes:
+      - grafana:/var/lib/grafana
+secrets:
+  db_pass:
+    file: ./db_pass.txt
+  db_root_pass:
+    file: ./db_root_pass.txt
+
+volumes:
+  db:
+  grafana:

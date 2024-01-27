@@ -1,0 +1,7 @@
+[master]
+148.60.11.167
+
+
+[master:vars]
+ansible_connection=ssh
+ansible_python_interpreter=/usr/bin/python3

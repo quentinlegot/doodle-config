@@ -1,0 +1,2 @@
+- include_tasks: install_docker.yml
+- include_tasks: deploy_containers.yml
