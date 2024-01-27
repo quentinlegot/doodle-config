@@ -34,7 +34,7 @@ services:
     volumes:
       - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
   myadmin:
-    image: phpmyadmin:latest./prometheus_data
+    image: phpmyadmin:latest
     #   - "8090:80"
     environment:
       PMA_HOST: db
