@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels:
+    app: tlc
+    service: api
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: api
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: api
+    spec:
+      containers:
+      - name: tlc
+        image: quentinlegot/tlc-api:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
+        ports:
+        - containerPort: 8080
+          name: "api8080"

@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namePrefix: tlc-
+resources:
+  - front-deployement.yaml
+  - front-svc.yaml
+  - front-volume.yaml
