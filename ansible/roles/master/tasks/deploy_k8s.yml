@@ -42,8 +42,10 @@
 - name: enable microk8s DNS, storage, dashboard, ingress and registry module
   command: microk8s enable dns storage dashboard ingress registry
 - name: Create tlc namespace on kubernetes
-  command: microk8s kubectl create ns tlc --dry-run=client -o yaml | kubectl apply -f -
+  command: 
+    chdir: "/home/{{ user }}/doodle-config/kubernetes"
+    cmd: "microk8s kubectl apply -f ns.yaml"
 - name: Apply kubernetes config files
   command:
-    chdir: "/home/{{ user }}/doodle-config"
-    cmd: "microk8s kubectl apply -k ./kubernetes"
+    chdir: "/home/{{ user }}/doodle-config/kubernetes"
+    cmd: "microk8s kubectl apply -k ."
