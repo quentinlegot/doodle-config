@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myadmin
+  labels:
+    app: tlc
+    service: myadmin
+spec:
+  selector:
+    app: tlc
+    service: myadmin
+  ports:
+  - port: 80

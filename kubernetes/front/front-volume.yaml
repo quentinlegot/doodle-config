@@ -8,6 +8,6 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 50Mi
+      storage: 10Mi
   accessModes:
     - ReadOnlyMany

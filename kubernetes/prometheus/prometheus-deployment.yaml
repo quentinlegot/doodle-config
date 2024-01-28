@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  labels:
+    app: tlc
+    service: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: prometheus
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: ubuntu/prometheus:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+          - name: prometheus-data-pv
+            mountPath: /prometheus
+          - name: prometheus-conf-pv
+            mountPath: /etc/prometheus
+            readOnly: true
+      volumes:
+        - name: prometheus-data-pv
+          persistentVolumeClaim:
+            claimName: prometheus-data-pv-claim
+        - name: prometheus-conf-pv
+          persistentVolumeClaim:
+            claimName: prometheus-conf-pv-claim

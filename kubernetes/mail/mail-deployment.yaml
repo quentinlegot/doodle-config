@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail
+  labels:
+    app: tlc
+    service: mail
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: mail
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: mail=
+    spec:
+      containers:
+      - name: mail
+        image: bytemark/smtp
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 25
+          name: mail25

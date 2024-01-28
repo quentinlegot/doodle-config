@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: front
+  labels:
+    app: tlc
+    service: front
+spec:
+  resources:
+    requests:
+      storage: 100Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany

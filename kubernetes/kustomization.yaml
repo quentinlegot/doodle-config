@@ -2,6 +2,23 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namePrefix: tlc-
 resources:
-  - front-deployement.yaml
-  - front-svc.yaml
-  - front-volume.yaml
+  - front/front-deployment.yaml
+  - front/front-svc.yaml
+  - front/ront-volume.yaml
+  - api/api-deployment.yaml
+  - api/api-svc.yaml
+  - db/db-deployment.yaml
+  - db/db-svc.yaml
+  - db/db-volume.yaml
+  - etherpad/etherpad-deployment.yaml
+  - etherpad/etherpad-svc.yaml
+  - etherpad/etherpad-volume.yaml
+  - myadmin/myadmin-deployment.yaml
+  - myadmin/myadmin-svc.yaml
+  - mail/mail-deployment.yaml
+  - mail/mail-svc.yaml
+secretGenerator:
+  - name: database-creds
+    files:
+      - db_pass.txt
+      - db_root_pass.txt

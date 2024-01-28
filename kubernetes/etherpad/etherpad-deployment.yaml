@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etherpad
+  labels:
+    app: tlc
+    service: etherpad
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: etherpad
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: etherpad
+    spec:
+      containers:
+      - name: etherpad
+        image: etherpad/etherpad:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "350m"
+        env:
+          - name: DB_TYPE
+            value: mysql
+          - name: DB_HOST
+            value: db
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_NAME
+            value: tlc
+          - name: DB_USER
+            value: tlc
+          - name: DB_PASS
+            valueFrom:
+              configMapKeyRef:
+                key: db_pass.txt
+                name: database-creds
+        volumeMounts:
+          - name: etherpad-apikey-pv
+            mountPath: /opt/etherpad-lite/
+            readOnly: true
+        ports:
+        - containerPort: 9001
+      volumes:
+        - name: etherpad-apikey-pv
+          persistentVolumeClaim:
+            claimName: etherpad-apikey-pv-claim
+

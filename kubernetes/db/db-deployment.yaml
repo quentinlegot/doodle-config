@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: tlc
+    service: db
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: db
+    spec:
+      containers:
+      - name: db
+        image: quentinlegot/tlc-db:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3306
+          name: mysqlPort
+        volumeMounts:
+          - name: db-data-pv
+            mountPath: /var/lib/mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: db_root_pass.txt
+                name: database-creds
+          - name: MYSQL_DATABASE
+            value: tlc
+          - name: MYSQL_USER
+            value: tlc
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: db_pass.txt
+                name: database-creds
+      volumes:
+        - name: db-data-pv
+          persistentVolumeClaim:
+            claimName: db-data-pv-claim
