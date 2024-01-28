@@ -41,6 +41,8 @@
   command: microk8s status --wait-ready
 - name: Start ingress module
   command: microk8s enable ingress
+- name: Create tlc namespace on kubernetes
+  command: microk8s kubectl create ns tlc
 - name: Apply kubernetes config files
   command:
     chdir: "/home/{{ user }}/doodle-config"
