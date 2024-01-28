@@ -1,0 +1,47 @@
+
+- name: Install git
+  apt:
+    name: [ git ]
+    update_cache: true
+    state: latest
+- name: Clone project
+  git:
+    repo: 'https://github.com/quentinlegot/doodle-config'
+    dest: "/home/{{ user }}/doodle-config"
+    depth: 1
+    force: yes
+- name: Create secret file 1
+  copy:
+    dest: "/home/{{ user }}/doodle-config/db_pass.txt"
+    content: "{{ db_pass }}"
+- name: Create secret file 2
+  copy:
+    dest: "/home/{{ user }}/doodle-config/db_root_pass.txt"
+    content: "{{ db_root_pass }}"
+- name: Install microk8s
+  snap: 
+    name: microk8s
+    channel: 1.25
+    classic: yes
+- name: Add user {{ user }} to microk8s group
+  user:
+    append: true
+    groups: [ "microk8s" ]
+    name: "{{ user }}"
+- name: Change ~/.kube owner to {{ user }}
+  file:
+    path: $HOME/.kube
+    state: directory
+    owner: "{{ user }}"
+    force: yes
+    recurse: yes
+- name: Start microk8s
+  command: microk8s start
+- name: check status
+  command: microk8s status --wait-ready
+- name: Start ingress module
+  command: microk8s enable ingress
+- name: Apply kubernetes config files
+  command:
+    chdir: "/home/{{ user }}/doodle-config"
+    cmd: "microk8s kubectl apply -k ./kubernetes"
