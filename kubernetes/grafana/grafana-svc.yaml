@@ -11,4 +11,6 @@ spec:
     service: grafana
   ports:
   - port: 3000
+    name: grafana
   - port: 9100
+    name: node-exporter

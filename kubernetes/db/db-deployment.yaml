@@ -27,27 +27,23 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 3306
-          name: mysqlPort
+          name: mysql-port
         volumeMounts:
           - name: db-data-pv
             mountPath: /var/lib/mysql
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 key: db_root_pass.txt
                 name: database-creds
-            args:
-          - '--path.procfs=/host/proc'
-          - '--path.sysfs=/host/sys'
-          - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
           - name: MYSQL_DATABASE
             value: tlc
           - name: MYSQL_USER
             value: tlc
           - name: MYSQL_PASSWORD
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 key: db_pass.txt
                 name: database-creds
       - name: node-exporter
@@ -56,6 +52,10 @@ spec:
           limits:
             memory: "64Mi"
             cpu: "50m"
+        args:
+        - '--path.procfs=/host/proc'
+        - '--path.sysfs=/host/sys'
+        - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
         volumeMounts:
           - name: proc
             mountPath: /host/proc

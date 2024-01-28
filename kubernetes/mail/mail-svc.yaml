@@ -11,4 +11,6 @@ spec:
     service: mail
   ports:
   - port: 25
+    name: smtp
   - port: 9100
+    name: node-exporter

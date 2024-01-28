@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namePrefix: tlc-
+namespace: tlc
 resources:
   - front/front-deployment.yaml
   - front/front-svc.yaml
@@ -21,6 +21,7 @@ resources:
   - grafana/grafana-deployment.yaml
   - grafana/grafana-svc.yaml
   - grafana/grafana-volume.yaml
+  - ingress.yaml
 secretGenerator:
   - name: database-creds
     files:
@@ -32,7 +33,7 @@ configMapGenerator:
       - ./prometheus/prometheus.yml
   - name: etherpad-apikey
     files: 
-      - ../api/APIKEY.txt
+      - ./api/APIKEY.txt
   - name: nginx-conf
     files:
-      - ../front/app.conf
+      - ./front/app.conf

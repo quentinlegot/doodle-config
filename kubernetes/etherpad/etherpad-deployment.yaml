@@ -23,7 +23,7 @@ spec:
         image: etherpad/etherpad:latest
         resources:
           limits:
-            memory: "128Mi"
+            memory: "256Mi"
             cpu: "350m"
         env:
           - name: DB_TYPE
@@ -38,13 +38,14 @@ spec:
             value: tlc
           - name: DB_PASS
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 key: db_pass.txt
                 name: database-creds
         volumeMounts:
           - name: etherpad-apikey-pv
-            mountPath: /opt/etherpad-lite/
+            mountPath: /opt/etherpad-lite/APIKEY.txt
             readOnly: true
+            subPath: APIKEY.txt
         ports:
         - containerPort: 9001
       - name: node-exporter

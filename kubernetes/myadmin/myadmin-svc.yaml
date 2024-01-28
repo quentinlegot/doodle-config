@@ -11,4 +11,6 @@ spec:
     service: myadmin
   ports:
   - port: 80
+    name: phpmyadmin
   - port: 9100
+    name: node-exporter

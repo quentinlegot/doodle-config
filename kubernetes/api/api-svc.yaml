@@ -11,4 +11,6 @@ spec:
     service: api
   ports:
   - port: 8080
+    name: api
   - port: 9100
+    name: node-exporter

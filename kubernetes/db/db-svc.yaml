@@ -11,4 +11,6 @@ spec:
     service: db
   ports:
   - port: 3306
+    name: db
   - port: 9100
+    name: node-exporter

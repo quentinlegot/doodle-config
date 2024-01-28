@@ -11,4 +11,3 @@ spec:
     service: prometheus
   ports:
   - port: 9090
-  - port: 9100

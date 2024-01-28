@@ -11,5 +11,8 @@ spec:
     service: front
   ports:
   - port: 80
+    name: http
   - port: 443
+    name: https
   - port: 9100
+    name: node-exporter

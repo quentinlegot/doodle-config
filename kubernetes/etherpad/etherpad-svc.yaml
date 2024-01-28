@@ -11,4 +11,6 @@ spec:
     service: etherpad
   ports:
   - port: 9001
+    name: etherpad
   - port: 9100
+    name: node-exporter
