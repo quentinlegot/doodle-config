@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail
+  labels:
+    app: tlc
+    service: mail
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: mail
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: mail
+    spec:
+      containers:
+      - name: mail
+        image: bytemark/smtp
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 25
+          name: mail25
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        args:
+          - '--path.procfs=/host/proc'
+          - '--path.sysfs=/host/sys'
+          - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: HostToContainer
+            readOnly: true
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: HostToContainer
+            readOnly: true
+      volumes:
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc
+          hostPath:
+            path: /proc

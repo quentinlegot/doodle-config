@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels:
+    app: tlc
+    service: front
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: front
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: front
+    spec:
+      containers:
+      - name: front
+        image: quentinlegot/tlc-front:latest
+        ports:
+          - containerPort: 80
+            name: "front80"
+          - containerPort: 443
+            name: "front443"
+        volumeMounts:
+          - name: front-config-pv
+            mountPath: /etc/nginx/conf.d
+            readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        args:
+          - '--path.procfs=/host/proc'
+          - '--path.sysfs=/host/sys'
+          - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: HostToContainer
+            readOnly: true
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: HostToContainer
+            readOnly: true
+      volumes:
+        - name: front-config-pv
+          configMap:
+            defaultMode: 420
+            name: nginx-conf
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc
+          hostPath:
+            path: /proc

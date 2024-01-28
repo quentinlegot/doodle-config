@@ -1,2 +1,3 @@
 - include_tasks: install_docker.yml
-- include_tasks: deploy_containers.yml
+# - include_tasks: deploy_containers.yml # docker compose
+- include_tasks: deploy_k8s.yml # k8s
