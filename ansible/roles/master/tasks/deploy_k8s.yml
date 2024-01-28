@@ -39,8 +39,8 @@
   command: microk8s start
 - name: check status
   command: microk8s status --wait-ready
-- name: enable microk8s DNS, storage, dashboard, ingress and registry module
-  command: microk8s enable dns storage dashboard ingress registry
+- name: enable microk8s DNS, storage, ingress module
+  command: microk8s enable dns storage ingress
 - name: Create tlc namespace on kubernetes
   command: 
     chdir: "/home/{{ user }}/doodle-config/kubernetes"
