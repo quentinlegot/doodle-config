@@ -11,3 +11,4 @@ spec:
     service: mail
   ports:
   - port: 25
+  - port: 9100

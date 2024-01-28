@@ -4,7 +4,6 @@ namePrefix: tlc-
 resources:
   - front/front-deployment.yaml
   - front/front-svc.yaml
-  - front/ront-volume.yaml
   - api/api-deployment.yaml
   - api/api-svc.yaml
   - db/db-deployment.yaml
@@ -12,13 +11,28 @@ resources:
   - db/db-volume.yaml
   - etherpad/etherpad-deployment.yaml
   - etherpad/etherpad-svc.yaml
-  - etherpad/etherpad-volume.yaml
   - myadmin/myadmin-deployment.yaml
   - myadmin/myadmin-svc.yaml
   - mail/mail-deployment.yaml
   - mail/mail-svc.yaml
+  - prometheus/prometheus-deployment.yaml
+  - prometheus/prometheus-svc.yaml
+  - prometheus/prometheus-volume.yaml
+  - grafana/grafana-deployment.yaml
+  - grafana/grafana-svc.yaml
+  - grafana/grafana-volume.yaml
 secretGenerator:
   - name: database-creds
     files:
       - db_pass.txt
       - db_root_pass.txt
+configMapGenerator:
+  - name: prometheus-conf
+    files:
+      - ./prometheus/prometheus.yml
+  - name: etherpad-apikey
+    files: 
+      - ../api/APIKEY.txt
+  - name: nginx-conf
+    files:
+      - ../front/app.conf

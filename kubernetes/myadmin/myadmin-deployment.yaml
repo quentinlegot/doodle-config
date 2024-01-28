@@ -10,25 +10,50 @@ spec:
     matchLabels:
       app: tlc
       service: myadmin
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: tlc
         service: myadmin
-  strategy:
-    type: Recreate
-  spec:
-    containers:
-    - name: myadmin
-      image: phpmyadmin:latest
-      resources:
-        limits:
-          memory: "128Mi"
-          cpu: "200m"
-      ports:
-        - containerPort: 80
-          name: myadmin80
-      env:
-        - name: PMA_HOST
-          value: db
-      
+    spec:
+      containers:
+      - name: myadmin
+        image: phpmyadmin:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+          - containerPort: 80
+            name: myadmin80
+        env:
+          - name: PMA_HOST
+            value: db
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        args:
+          - '--path.procfs=/host/proc'
+          - '--path.sysfs=/host/sys'
+          - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: HostToContainer
+            readOnly: true
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: HostToContainer
+            readOnly: true
+      volumes:
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc
+          hostPath:
+            path: /proc    

@@ -37,6 +37,10 @@ spec:
               configMapKeyRef:
                 key: db_root_pass.txt
                 name: database-creds
+            args:
+          - '--path.procfs=/host/proc'
+          - '--path.sysfs=/host/sys'
+          - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
           - name: MYSQL_DATABASE
             value: tlc
           - name: MYSQL_USER
@@ -46,7 +50,29 @@ spec:
               configMapKeyRef:
                 key: db_pass.txt
                 name: database-creds
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: HostToContainer
+            readOnly: true
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: HostToContainer
+            readOnly: true
       volumes:
         - name: db-data-pv
           persistentVolumeClaim:
             claimName: db-data-pv-claim
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc
+          hostPath:
+            path: /proc
+

@@ -11,3 +11,4 @@ spec:
     service: myadmin
   ports:
   - port: 80
+  - port: 9100

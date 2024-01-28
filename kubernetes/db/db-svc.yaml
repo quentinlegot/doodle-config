@@ -11,3 +11,4 @@ spec:
     service: db
   ports:
   - port: 3306
+  - port: 9100

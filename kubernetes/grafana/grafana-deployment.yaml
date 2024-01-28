@@ -1,33 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mail
+  name: grafana
   labels:
     app: tlc
-    service: mail
+    service: grafana
 spec:
   selector:
     matchLabels:
       app: tlc
-      service: mail
+      service: grafana
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: tlc
-        service: mail
+        service: grafana
     spec:
       containers:
-      - name: mail
-        image: bytemark/smtp
+      - name: grafana
+        image: grafana/grafana:latest
         resources:
           limits:
-            memory: "64Mi"
-            cpu: "50m"
+            memory: "256Mi"
+            cpu: "300m"
+        env:
+          - name: GF_SERVER_PROTOCOL
+            value: http
+          - name: GF_SERVER_DOMAIN
+            value: quentinl.diverse-team.fr
+          - name: GF_SERVER_ROOT_URL
+            value: "%(protocol)s://%(domain)s:%(http_port)s/metrics"
+          - name: GF_SERVER_SERVE_FROM_SUB_PATH
+            value: "true"
         ports:
-        - containerPort: 25
-          name: mail25
+        - containerPort: 3000
+          name: grafana3000
+        volumeMounts:
+          - name: grafana-data-pv
+            mountPath: /var/lib/grafana
       - name: node-exporter
         image: prom/node-exporter:latest
         resources:
@@ -48,6 +60,9 @@ spec:
             mountPropagation: HostToContainer
             readOnly: true
       volumes:
+        - name: grafana-data-pv
+          persistentVolumeClaim:
+            claimName: grafana-data-pv-claim
         - name: sys
           hostPath:
             path: /sys
