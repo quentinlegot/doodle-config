@@ -33,7 +33,7 @@ spec:
         resources:
           limits:
             memory: "128Mi"
-            cpu: "250m"
+            cpu: "100m"
       - name: node-exporter
         image: prom/node-exporter:latest
         resources:

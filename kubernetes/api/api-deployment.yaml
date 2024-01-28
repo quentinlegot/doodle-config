@@ -23,8 +23,8 @@ spec:
         image: quentinlegot/tlc-api:latest
         resources:
           limits:
-            memory: "256Mi"
-            cpu: "300m"
+            memory: "128Mi"
+            cpu: "150m"
         ports:
         - containerPort: 8080
           name: "api8080"
