@@ -12,11 +12,11 @@
     force: yes
 - name: Create secret file 1
   copy:
-    dest: "/home/{{ user }}/doodle-config/db_pass.txt"
+    dest: "/home/{{ user }}/doodle-config/kubernetes/db_pass.txt"
     content: "{{ db_pass }}"
 - name: Create secret file 2
   copy:
-    dest: "/home/{{ user }}/doodle-config/db_root_pass.txt"
+    dest: "/home/{{ user }}/doodle-config/kubernetes/db_root_pass.txt"
     content: "{{ db_root_pass }}"
 - name: Install microk8s
   snap: 
