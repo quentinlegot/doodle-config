@@ -11,4 +11,4 @@ spec:
     service: keycloak
   ports:
   - port: 8080
-    targetPort: keycloakHttp
+    targetPort: keycloak-http
