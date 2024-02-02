@@ -36,6 +36,8 @@ spec:
             value: tlc
           - name: DB_USER
             value: tlc
+          - name: MINIFY
+            value: "false"
           - name: DB_PASS
             valueFrom:
               secretKeyRef:
