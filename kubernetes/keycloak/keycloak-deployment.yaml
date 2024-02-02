@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: tlc
+    service: keycloak
+spec:
+  selector:
+    matchLabels:
+      app: tlc
+      service: keycloak
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tlc
+        service: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:23.0.6
+        args: ["start", "--cache-stack=kubernetes"]
+        env:
+          - name: KEYCLOAK_ADMIN
+            value: "admin"
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            value: "admin"
+          - name: KC_PROXY
+            value: "edge"
+          - name: jgroups.dns.query
+            value: "keycloak"
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
+          - name: KC_HEALTH_ENABLED
+            value: "true"
+          - name: KC_METRICS_ENABLED
+            value: "true"
+          - name: KC_HTTP_ENABLED
+            value: "true"
+          - name: KC_HTTP_RELATIVE_PATH
+            value: "/auth"
+          - name: KC_HOSTNAME_URL
+            value: "http://quentinl.diverse-team.fr/keycloak/auth/"
+          - name: KC_HOSTNAME_ADMIN_URL
+            value: "http://quentinl.diverse-team.fr/keycloak/auth/"
+          - name: KC_DB
+            value: "mysql"
+          - name: KC_DB_URL
+            value: "jdbc:mysql://db/tlc"
+          - name: KC_DB_URL_HOST
+            value: "db"
+          - name: KC_DB_URL_PORT
+            value: "3306"
+          - name: KC_DB_URL_DATABASE
+            value: "tlc"
+          - name: KC_DB_USERNAME
+            value: "tlc"
+          - name: KC_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: db_pass.txt
+                name: database-creds
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: jgroups
+          containerPort: 7600
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "10m"
+        args:
+        - '--path.procfs=/host/proc'
+        - '--path.sysfs=/host/sys'
+        - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: HostToContainer
+            readOnly: true
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: HostToContainer
+            readOnly: true
+      volumes:
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc
+          hostPath:
+            path: /proc

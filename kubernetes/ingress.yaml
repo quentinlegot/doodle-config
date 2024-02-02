@@ -31,6 +31,13 @@ spec:
             name: grafana
             port:
               number: 3000
+      - pathType: Prefix
+        path: "/keycloak/(.*)"
+        backend:
+          service:
+            name: keycloak
+            port:
+              number: 8080
   - host: "quentinl.pad.diverse-team.fr"
     http:
       paths:

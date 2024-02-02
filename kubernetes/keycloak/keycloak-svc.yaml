@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  labels:
+    app: tlc
+    service: keycloak
+spec:
+  selector:
+    app: tlc
+    service: keycloak
+  ports:
+  - port: 8080
+    targetPort: keycloakHttp

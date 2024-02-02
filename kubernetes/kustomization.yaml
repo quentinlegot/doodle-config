@@ -21,6 +21,8 @@ resources:
   - grafana/grafana-deployment.yaml
   - grafana/grafana-svc.yaml
   - grafana/grafana-volume.yaml
+  - keycloak/keycloak-deployment.yaml
+  - keycloak/keycloak-svc.yaml
   - ingress.yaml
 secretGenerator:
   - name: database-creds
