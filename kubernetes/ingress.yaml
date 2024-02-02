@@ -32,7 +32,7 @@ spec:
             port:
               number: 3000
       - pathType: Prefix
-        path: "/keycloak/(.*)"
+        path: "/keycloak"
         backend:
           service:
             name: keycloak
