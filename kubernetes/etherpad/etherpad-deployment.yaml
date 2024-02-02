@@ -41,8 +41,6 @@ spec:
               secretKeyRef:
                 key: db_pass.txt
                 name: database-creds
-          - name: MINIFY
-            value: "false"
         volumeMounts:
           - name: etherpad-apikey-pv
             mountPath: /opt/etherpad-lite/APIKEY.txt
