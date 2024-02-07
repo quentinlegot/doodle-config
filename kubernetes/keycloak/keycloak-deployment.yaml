@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: tlc
       service: keycloak
-  strategy:
-    type: Recreate
+  # strategy:
+  #   type: Recreate
   template:
     metadata:
       labels:
@@ -31,8 +31,10 @@ spec:
             value: "edge"
           - name: jgroups.dns.query
             value: "keycloak"
-          - name: PROXY_ADDRESS_FORWARDING
-            value: "true"
+          # - name: PROXY_ADDRESS_FORWARDING
+          #   value: "true"
+          - name: KC_HOSTNAME_STRICT
+            value: "false"
           - name: KC_HEALTH_ENABLED
             value: "true"
           - name: KC_METRICS_ENABLED
@@ -40,11 +42,11 @@ spec:
           - name: KC_HTTP_ENABLED
             value: "true"
           - name: KC_HTTP_RELATIVE_PATH
-            value: "/auth"
+            value: "/keycloak"
           - name: KC_HOSTNAME_URL
-            value: "http://quentinl.diverse-team.fr/keycloak/auth/"
+            value: "http://quentinl.diverse-team.fr/keycloak"
           - name: KC_HOSTNAME_ADMIN_URL
-            value: "http://quentinl.diverse-team.fr/keycloak/auth/"
+            value: "http://quentinl.diverse-team.fr/keycloak/admin"
           - name: KC_DB
             value: "mysql"
           - name: KC_DB_URL

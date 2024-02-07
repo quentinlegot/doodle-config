@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: tlc
       service: api
-  strategy:
-    type: Recreate
+  # strategy:
+  #   type: Recreate
   template:
     metadata:
       labels:
