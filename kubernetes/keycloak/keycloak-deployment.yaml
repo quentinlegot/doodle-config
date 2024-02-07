@@ -31,8 +31,8 @@ spec:
             value: "edge"
           - name: jgroups.dns.query
             value: "keycloak"
-          # - name: PROXY_ADDRESS_FORWARDING
-          #   value: "true"
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
           - name: KC_HOSTNAME_STRICT
             value: "false"
           - name: KC_HEALTH_ENABLED
@@ -41,12 +41,12 @@ spec:
             value: "true"
           - name: KC_HTTP_ENABLED
             value: "true"
-          - name: KC_HTTP_RELATIVE_PATH
-            value: "/keycloak"
-          - name: KC_HOSTNAME_URL
-            value: "http://quentinl.diverse-team.fr/keycloak"
-          - name: KC_HOSTNAME_ADMIN_URL
-            value: "http://quentinl.diverse-team.fr/keycloak/admin"
+          # - name: KC_HTTP_RELATIVE_PATH
+          #   value: "/keycloak"
+          # - name: KC_HOSTNAME_URL
+          #   value: "http://quentinl.diverse-team.fr/keycloak"
+          # - name: KC_HOSTNAME_ADMIN_URL
+          #   value: "http://quentinl.diverse-team.fr/keycloak/admin"
           - name: KC_DB
             value: "mysql"
           - name: KC_DB_URL
