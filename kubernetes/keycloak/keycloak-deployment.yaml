@@ -44,9 +44,11 @@ spec:
           # - name: KC_HTTP_RELATIVE_PATH
           #   value: "/keycloak"
           - name: KC_HOSTNAME_URL
-            value: "http://quentinl.diverse-team.fr:8080/keycloak"
+            value: "http://quentinl.diverse-team.fr:80/keycloak"
           - name: KC_HOSTNAME_ADMIN_URL
-            value: "http://quentinl.diverse-team.fr:8080/keycloak/admin"
+            value: "http://quentinl.diverse-team.fr:80/keycloak/admin"
+          - name: KC_HTTP_PORT
+            value: "8080"
           # - name: KC_HOSTNAME
           #   value: quentinl.diverse-team.fr
           - name: KC_HOSTNAME_DEBUG
