@@ -21,7 +21,7 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:23.0.6
-        args: ["start", "--cache-stack=kubernetes"]
+        args: ["start"]
         env:
           - name: KEYCLOAK_ADMIN
             value: "admin"
@@ -29,12 +29,12 @@ spec:
             value: "admin"
           - name: KC_PROXY
             value: "edge"
-          - name: jgroups.dns.query
-            value: "keycloak"
+          # - name: jgroups.dns.query
+          #   value: "keycloak"
           - name: PROXY_ADDRESS_FORWARDING
             value: "true"
-          - name: KC_HOSTNAME_STRICT
-            value: "false"
+          # - name: KC_HOSTNAME_STRICT
+          #   value: "false"
           - name: KC_HEALTH_ENABLED
             value: "true"
           - name: KC_METRICS_ENABLED
@@ -47,6 +47,8 @@ spec:
           #   value: "http://quentinl.diverse-team.fr/keycloak"
           # - name: KC_HOSTNAME_ADMIN_URL
           #   value: "http://quentinl.diverse-team.fr/keycloak/admin"
+          - name: KC_HOSTNAME
+            value: quentinl.diverse-team.fr
           - name: KC_DB
             value: "mysql"
           - name: KC_DB_URL
@@ -71,8 +73,12 @@ spec:
         ports:
         - name: http
           containerPort: 8080
-        - name: jgroups
-          containerPort: 7600
+        # - name: jgroups
+        #   containerPort: 7600
+        readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
       - name: node-exporter
         image: prom/node-exporter:latest
         resources:
