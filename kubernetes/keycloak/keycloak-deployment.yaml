@@ -43,12 +43,14 @@ spec:
             value: "true"
           # - name: KC_HTTP_RELATIVE_PATH
           #   value: "/keycloak"
-          # - name: KC_HOSTNAME_URL
-          #   value: "http://quentinl.diverse-team.fr/keycloak"
-          # - name: KC_HOSTNAME_ADMIN_URL
-          #   value: "http://quentinl.diverse-team.fr/keycloak/admin"
-          - name: KC_HOSTNAME
-            value: quentinl.diverse-team.fr
+          - name: KC_HOSTNAME_URL
+            value: "http://quentinl.diverse-team.fr:8080/keycloak"
+          - name: KC_HOSTNAME_ADMIN_URL
+            value: "http://quentinl.diverse-team.fr:8080/keycloak/admin"
+          # - name: KC_HOSTNAME
+          #   value: quentinl.diverse-team.fr
+          - name: KC_HOSTNAME_DEBUG
+            value: "true"
           - name: KC_DB
             value: "mysql"
           - name: KC_DB_URL
