@@ -21,6 +21,7 @@ spec:
       containers:
       - name: keycloak
         image: quentinlegot/tlc-keycloak:latest
+        imagePullPolicy: Always
         args: ["start"]
         env:
           - name: KEYCLOAK_ADMIN
