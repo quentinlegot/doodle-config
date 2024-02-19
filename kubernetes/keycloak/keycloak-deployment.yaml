@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: quay.io/keycloak/keycloak:23.0.6
-        args: ["start-dev"]
+        image: quentinlegot/tlc-keycloak:latest
+        args: ["start"]
         env:
           - name: KEYCLOAK_ADMIN
             value: "admin"
@@ -35,10 +35,6 @@ spec:
             value: "true"
           # - name: KC_HOSTNAME_STRICT
           #   value: "false"
-          - name: KC_HEALTH_ENABLED
-            value: "true"
-          - name: KC_METRICS_ENABLED
-            value: "true"
           - name: KC_HTTP_ENABLED
             value: "true"
           # - name: KC_HTTP_RELATIVE_PATH
@@ -57,7 +53,7 @@ spec:
             value: "mariadb"
           # - name: KC_DB_URL
           #   value: "jdbc:mysql://db/tlc"
-          - name: KC_DB_URL_HOST
+          - name: KC_DB_URL
             value: "db"
           - name: KC_DB_URL_PORT
             value: "3306"
